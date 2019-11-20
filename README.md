@@ -8,5 +8,8 @@ Environment Setup Instructions:
  3.  sudo apt install python3-pip
  4.  pip3 install flask
  5.  pip3 install Flask_SQLAlchemy
+ 
 To run this app locally, type the following command in the terminal: python3 <PATH_TO>testAPI.py
 The endpoint will be visible at 'http://127.0.0.1:5000/app/people'
+
+Credit to https://kryogenix.org/code/browser/sorttable/ for table sorting algorithm
