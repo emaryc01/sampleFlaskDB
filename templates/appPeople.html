@@ -1,0 +1,99 @@
+<html lang="en">
+  <head><meta charset="utf-8">
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/static/js/sorttable.js"></script>
+    <script src="/static/js/mainScripts.js"></script>
+    <link rel="stylesheet" href="/static/css/mainStylesheet.css">
+  </head>
+  <body>
+    <h1>{{message}}</h1>
+    <h1>Add New Person</h1>
+      <form method="POST" action="/app/people" onsubmit="return (confirm('Do you really want to add this person?') && validateForm('newPerson', 'new'))" name = "newPerson" class="newPerson">
+          <label for="newName">Name:  </label>
+          <input type="text" name="newName">
+          <label for="newAge">Age: </label>
+          <input type="text" name="newAge">
+          <label for="newBalance">Balance:(£) </label>
+          <input type="text" name="newBalance" value = "0.00">
+          <label for="newEmail">Email: </label>
+          <input type="text" name="newEmail">
+          <label for ="newAddress">Address: </label>
+          <input type="text" name="newAddress">
+          <input type="submit" value="Add">
+    </form>
+    <div id = "validationResponse"></div>
+    <h1>Edit/Delete People</h1>
+    <div>
+      <table id="peopleTable" class="sortable">
+        <thead>
+          <th class="sorttable_nosort">ID</th>
+          <th>Name</th>
+          <th class="sorttable_nosort">Age</th>
+          <th class="sorttable_nosort">Balance (£) </th>
+          <th class="sorttable_nosort">Email</th>
+          <th>Address</th>
+        </thead>
+        <tbody>
+          {% for person in people %}
+            <tr>
+              <form method="POST" action="./update" onsubmit="return (confirm('Do you really want to edit this record?') && validateForm('form{{person.id}}', 'update'))" name = "form{{person.id}}" >
+                <td><input type="text" name="updateID" value = {{person.id}} readonly class="editPerson"></td>
+                <td><input type="text" name="updateName" value ={{person.name}}></td>
+                <td><input type="text" name="updateAge" value ={{person.age}}></td>
+                <td><input type="text" name="updateBalance" value ="{{'{0:.2f}'.format(person.balance)}}"></td>
+                <td><input type="text" name="updateEmail" value ={{person.email}}></td>
+                <td><input type="text" name="updateAddress" value ={{person.address}}></td>
+                <td><input type="checkbox"name="checkBox{{person.id}}" class = 'save-cb-state'></td>
+                <td><input type="submit" name = "update" value="Update"></td>
+                <td><input type="submit" name = "delete" value="Delete"></td>
+              </form>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </body>
+<script>
+  (function() {
+    // variable to store our current state
+    var currentState;
+
+    // bind to the onload event
+    window.addEventListener('load', function() {
+      // Get the current state from localstorage
+      // State is stored as a JSON string
+      currentState = JSON.parse(localStorage['CBState'] || '{}');
+
+      // Loop through state array and restore checked
+      // state for matching elements
+      for(var i in currentState) {
+        var el = document.querySelector('input[name="' + i + '"]');
+        if (el) el.checked = true;
+      }
+
+      // Get all checkboxes that you want to monitor state for
+      var cb = document.getElementsByClassName('save-cb-state');
+
+      // Loop through results and ...
+      for(var i = 0; i < cb.length; i++) {
+
+        //bind click event handler
+        cb[i].addEventListener('click', function(evt) {
+          // If checkbox is checked then save to state
+          if (this.checked) {
+            currentState[this.name] = true;
+          }
+
+      // Else remove from state
+          else if (currentState[this.name]) {
+            delete currentState[this.name];
+          }
+
+      // Persist state
+          localStorage.CBState = JSON.stringify(currentState);
+        });
+      }
+    });
+  })();
+  </script>
+</html>

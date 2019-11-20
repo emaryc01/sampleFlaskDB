@@ -1,0 +1,31 @@
+.newPerson {
+       display: grid;
+       grid-template-columns: max-content 1fr;
+       grid-gap: 16px;
+     }
+     .newPerson label {
+       grid-column: 1 / 2;
+     }
+     .newPerson input,
+     button {
+       grid-column: 2 / 3;
+       width: 50%;
+     }
+     table {
+       table-layout: auto;
+       border-collapse: collapse;
+       width: 100%;
+     }
+     th, td {
+       text-align: left;
+       padding: 8px;
+     }
+     tr:nth-child(even) {
+       background-color: #f2f2f2;
+     }
+     input[type=text]:focus {
+      background-color: #caddfa;
+     }
+     input[type=submit] {
+      background-color: #c2c3c3;
+     }
